@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 
+from screwnix.proxy.proxy_router import router as proxy_router
+
 
 app = FastAPI(
     title="screwnix",
@@ -10,3 +12,11 @@ app = FastAPI(
 @app.get("/")
 async def root():
     return {"message": "Screwnix is running"}
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
+# Include proxy router AFTER direct routes so they take precedence
+app.include_router(proxy_router)
+
